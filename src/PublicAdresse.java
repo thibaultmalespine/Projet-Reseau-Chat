@@ -9,7 +9,7 @@ public class PublicAdresse {
     public PublicAdresse(){
         URL url;
         try {
-            url = new URL("ifconfig.me");
+            url = new URL("https://ifconfig.me");
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
             for (String line; (line = reader.readLine()) != null;) {
                 adresse_public = line;
