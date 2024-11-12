@@ -4,9 +4,12 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Cette classe est complètement inutile en fait
+ */
 public class PublicAdresse {
     private static String adresse_public;
-    
+
     public PublicAdresse(){
         URL url;
         try {
