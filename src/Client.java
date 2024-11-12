@@ -1,46 +1,40 @@
-// Socket sur lequel le serveur attends les connexions
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
- * Classe du serveur
+ * Classe du client
  */
-public class Server {
-
+public class Client {
     Socket clientSocket;
-    ServerSocket serverSocket;
-    BufferedReader in;
-    PrintWriter out;
+    private PrintWriter out;
+    private BufferedReader in;
+    private String ipServer;
+    private int port = 4444;
 
-
-    public Server() {
+   
+    public Client(){
         try {
-            écoute();
+            établirLaConnexion();
             créerFluxDeCommunication();
             boucleDeCommunication();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }     
     }
 
-    /**
-     * Créer la socket sur laquelle il attend une connexion, sur le port 4444 
+     /**
+     * Fait la demande de connexion
      */
-    public void écoute() throws IOException {
-
-        serverSocket = new ServerSocket(4444);
-        System.out.println("Server en écoute sur le port 4444");
-
-        clientSocket = serverSocket.accept();
-        System.out.println("Client connecté");
+    public void établirLaConnexion() throws UnknownHostException, IOException{
+        ipServer = PublicAdresse.getAdresse();
+        this.clientSocket = new Socket(ipServer, port);
     }
 
-    /**
+     /**
      * Créer le flux d'entré et de sortie pour communiquer entre deux appareils
      */
     public void créerFluxDeCommunication() throws IOException{
@@ -48,30 +42,24 @@ public class Server {
         out = new PrintWriter(clientSocket.getOutputStream(), true);
     }
 
-    /**
+     /**
      * Permet de continuer la communication tant que le message envoyé n'est pas vide
      */
     public void boucleDeCommunication() throws IOException{
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         String userInput = "";
-        String clientInput = "";
-        out.println("Salutation du server");
+        String serverInput = "";
         while (! userInput.equals("end")) {
-            if ((clientInput = in.readLine()).equals("end")){
+            if ((serverInput = in.readLine()).equals("end")){
                 break;
             }
-            System.out.println("echo " + clientInput);
+            System.out.println("echo " + serverInput);
             userInput = stdIn.readLine();
             out.println(userInput);
         }
     }
 
     public static void main(String[] args) {
-        Server server = new Server();
+        Client client = new Client();
     }
-
 }
-
-
-
-
