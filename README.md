@@ -11,7 +11,7 @@ mette fin à la connexion.
 4) Utilisez cette clé partagée pour chiffrer les messages envoyés et les déchiffrer à la
 réception. Affichez, pour chaque message, la version chiffrée et la version en clair.
 
-5) Comment peut-on améliorer la sécurité des échanges ?
+5) Comment peut-on améliorer la sécurité des échanges ? En cryptant la clé de cryptage (cryptage RSA)
 Implémentez et commentez votre solution. Vous pouvez utiliser d’autres services de
 java. (classes ...)
 - commentez votre code et justifiez votre choix (numéro de port, algorithmes, types
