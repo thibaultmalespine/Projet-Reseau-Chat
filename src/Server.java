@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Base64;
 
 /**
  * Classe du serveur
@@ -26,7 +27,7 @@ public class Server {
      */
     public void sendKey(){
         communication.key = Encodage.generateKey();
-        communication.out.println(communication.key);
+        communication.out.println(Base64.getEncoder().encodeToString(communication.key.getEncoded())); // convertit la clé de cryptage en base64 pour l'envoyer à travers le réseau
     }
 
     /**
