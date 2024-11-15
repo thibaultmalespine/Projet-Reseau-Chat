@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.Key;
 
 /**
  * Classe qui gère les communications entre deux appareils à partir d'une socket
@@ -11,6 +12,7 @@ public class Communication {
     BufferedReader in;
     PrintWriter out;
     Socket socket;
+    Key key;
     
     private String patternDeFin = "bye";
     
@@ -37,9 +39,10 @@ public class Communication {
             if ((clientInput = in.readLine()).equals(patternDeFin)){
                 break;
             }
-            System.out.println("echo " + clientInput);
+            System.out.println("message crypté : " + clientInput);
+            System.out.println("message décrypté : "+Encodage.decrypte(clientInput, key));
             userInput = stdIn.readLine();
-            out.println(userInput);
+            out.println(Encodage.crypte(userInput, key));
         }
     }
 }

@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 
 /**
@@ -10,16 +9,24 @@ public class Server {
     Communication communication;
     ServerSocket serverSocket;
 
-
     public Server() {
         try {
             écoute();
             communication.créerFluxDeCommunication();
+            sendKey();
             communication.out.println("Salutation du server");    
             communication.boucleDeCommunication();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Méthode qui créer puis envoie au client une Key
+     */
+    public void sendKey(){
+        communication.key = Encodage.generateKey();
+        communication.out.println(communication.key);
     }
 
     /**
