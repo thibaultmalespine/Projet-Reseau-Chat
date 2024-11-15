@@ -8,15 +8,15 @@ import java.net.URL;
  * Cette classe est complètement inutile en fait
  */
 public class PublicAdresse {
-    private static String adresse_public;
 
-    public PublicAdresse(){
+    public static String getAdresse() {
         URL url;
+        String adresse_public = "";
         try {
             url = new URL("https://ifconfig.me");
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
             for (String line; (line = reader.readLine()) != null;) {
-                PublicAdresse.adresse_public = line;
+                adresse_public = line;
             }
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
@@ -25,9 +25,10 @@ public class PublicAdresse {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return adresse_public;
     }
-
-    public static String getAdresse() {
-        return PublicAdresse.adresse_public;
+    public static void main(String[] args){
+        System.out.println(PublicAdresse.getAdresse());
     }
 }
+
