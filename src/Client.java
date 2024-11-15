@@ -6,7 +6,7 @@ import java.net.Socket;
  */
 public class Client {
     Communication communication;
-    private String ipServer;
+    private String ipServer = "10.163.201.30";
     private int port = 4444;
 
    
@@ -24,7 +24,6 @@ public class Client {
      * Fait la demande de connexion
      */
     public void établirLaConnexion() throws IOException{
-        ipServer = PublicAdresse.getAdresse();
         this.communication = new Communication(new Socket(ipServer, port));
     }
 
