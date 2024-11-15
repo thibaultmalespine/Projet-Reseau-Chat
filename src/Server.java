@@ -15,7 +15,7 @@ public class Server {
             écoute();
             communication.créerFluxDeCommunication();
             sendKey();
-            communication.out.println("Salutation du server");    
+            communication.out.println(Encodage.crypte("Salutation du server", communication.key));
             communication.boucleDeCommunication();
         } catch (IOException e) {
             e.printStackTrace();

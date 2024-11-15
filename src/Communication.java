@@ -39,6 +39,7 @@ public class Communication {
             if ((clientInput = in.readLine()).equals(patternDeFin)){
                 break;
             }
+            System.out.println("début communication");
             System.out.println("message crypté : " + clientInput);
             System.out.println("message décrypté : "+Encodage.decrypte(clientInput, key));
             userInput = stdIn.readLine();
