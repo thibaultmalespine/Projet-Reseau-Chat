@@ -31,6 +31,10 @@ public class Client {
         this.communication = new Communication(new Socket(ipServer, port));
     }
 
+    /**
+     * Récupère la clé envoyer par le serveur
+     * @throws IOException
+     */
     public void getKey() throws IOException{
 
         String keyBase64 = communication.in.readLine();
