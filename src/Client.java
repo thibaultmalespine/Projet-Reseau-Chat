@@ -6,7 +6,7 @@ import java.net.Socket;
  */
 public class Client {
     Communication communication;
-    private String ipServer = "10.163.201.30";
+    private String ipServer = "127.0.0.1";
     private int port = 4444;
 
    

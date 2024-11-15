@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 
 /**
@@ -26,6 +27,7 @@ public class Server {
      */
     public void écoute() throws IOException {
 
+        
         serverSocket = new ServerSocket(4444);
         System.out.println("Server en écoute sur le port 4444");
 
