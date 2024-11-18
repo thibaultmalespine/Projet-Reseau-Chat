@@ -24,6 +24,19 @@ public class Server {
         }
     }
 
+        /**
+     * Créer la socket sur laquelle il attend une connexion, sur le port 4444 
+     */
+    public void écoute() throws IOException {
+
+        
+        serverSocket = new ServerSocket(4444);
+        System.out.println("Server en écoute sur le port 4444");
+
+        communication = new Communication(serverSocket.accept());
+        System.out.println("Client connecté");
+    }
+
     /**
      * méthode qui créer puis envoie au client la clé RSA publique 
      */
@@ -41,19 +54,6 @@ public class Server {
         
         // Reconstruire la clé AES à partir du tableau d'octets décrypté
         communication.AESkey = Encodage.decrypteKey(RSAKeyBase64, communication.RSAkeyPair.getPrivate());
-    }
-
-    /**
-     * Créer la socket sur laquelle il attend une connexion, sur le port 4444 
-     */
-    public void écoute() throws IOException {
-
-        
-        serverSocket = new ServerSocket(4444);
-        System.out.println("Server en écoute sur le port 4444");
-
-        communication = new Communication(serverSocket.accept());
-        System.out.println("Client connecté");
     }
 
     public static void main(String[] args) {
