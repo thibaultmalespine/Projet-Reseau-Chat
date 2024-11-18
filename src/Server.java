@@ -13,21 +13,34 @@ public class Server {
     public Server() {
         try {
             écoute();
+            communication.RSAkeyPair = Encodage.generateRSAKeyPair();
             communication.créerFluxDeCommunication();
-            sendKey();
-            communication.out.println(Encodage.crypte("Salutation du server", communication.key));
+            sendRSAKey();
+            getAESKey();
+            communication.out.println(Encodage.crypteMessage("Salutation du server", communication.AESkey));
             communication.boucleDeCommunication();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Méthode qui créer puis envoie au client une Key
+     * méthode qui créer puis envoie au client la clé RSA publique 
      */
-    public void sendKey(){
-        communication.key = Encodage.generateKey();
-        communication.out.println(Base64.getEncoder().encodeToString(communication.key.getEncoded())); // convertit la clé de cryptage en base64 pour l'envoyer à travers le réseau
+    public void sendRSAKey(){
+        System.out.println("Envoie de la clé publique RSA");
+        communication.out.println(Base64.getEncoder().encodeToString(communication.RSAkeyPair.getPublic().getEncoded())); // envoie de la clé public
+    }
+
+    /**
+     * Récupère la Key AES envoyé par le serveur
+     */
+    public void getAESKey() throws Exception{
+        System.out.println("Récupération de la clé AES");
+        String RSAKeyBase64 = communication.in.readLine();
+        
+        // Reconstruire la clé AES à partir du tableau d'octets décrypté
+        communication.AESkey = Encodage.decrypteKey(RSAKeyBase64, communication.RSAkeyPair.getPrivate());
     }
 
     /**

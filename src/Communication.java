@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.Key;
+import java.security.KeyPair;
 
 /**
  * Classe qui gère les communications entre deux appareils à partir d'une socket
@@ -12,7 +13,8 @@ public class Communication {
     BufferedReader in;
     PrintWriter out;
     Socket socket;
-    Key key;
+    KeyPair RSAkeyPair;
+    Key AESkey;
     
     private String patternDeFin = "bye";
     
@@ -41,9 +43,9 @@ public class Communication {
             }
             System.out.println("début communication");
             System.out.println("message crypté : " + clientInput);
-            System.out.println("message décrypté : "+Encodage.decrypte(clientInput, key));
+            System.out.println("message décrypté : "+Encodage.decrypteMessage(clientInput, AESkey));
             userInput = stdIn.readLine();
-            out.println(Encodage.crypte(userInput, key));
+            out.println(Encodage.crypteMessage(userInput, AESkey));
         }
     }
 }
