@@ -25,7 +25,6 @@ public class RSA {
         }
         return keyPair;
     }
-
     
     /**
      * Méthode pour crypter une clé AES avec une clé publique RSA
@@ -45,7 +44,6 @@ public class RSA {
         return Base64.getEncoder().encodeToString(encryptedKey);
     }
 
-    
     /**
      * Méthode pour décrypter une clé AES avec une clé privée RSA
      * @param encryptedKey clé AES cryptée (en base64)
@@ -65,11 +63,21 @@ public class RSA {
         return new SecretKeySpec(decryptedKey, "AES");
     }
 
+    /**
+     * Convertis une clé publique en String codé en Base64 
+     * @param publicKey Clé à encoder
+     * @return String en Base64
+     */
     public static String publicKeyToString(Key publicKey){
         return Base64.getEncoder().encodeToString(publicKey.getEncoded());
     }
 
-    public static Key StringToPublicKey(String encodedKey){
+    /**
+     * Décode une clé publique encodée en Base64 
+     * @param encodedKey La clé au format Base64
+     * @return La clé au format Key
+     */
+    public static Key stringToPublicKey(String encodedKey){
         Key publicKey = null;
 
         // Décodage de la clé Base64 en bytes

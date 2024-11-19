@@ -18,12 +18,13 @@ public class Communication {
     
     public Communication(Socket socket) throws IOException {
         this.socket = socket;
+        créerFluxDeCommunication();
     }
     
     /**
      * Créer le flux d'entré et de sortie pour communiquer entre deux appareils
      */
-    public void créerFluxDeCommunication() throws IOException{
+    private void créerFluxDeCommunication() throws IOException{
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
     }

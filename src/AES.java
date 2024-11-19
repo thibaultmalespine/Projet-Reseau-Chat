@@ -22,8 +22,6 @@ public class AES {
         return key;
     }
 
-    
-
     /**
      * Méthode pour crypter un message avec l'algorithme AES
      * @param message message à crypter
@@ -61,15 +59,4 @@ public class AES {
         return new String(original);
     }
 
-
-
-  
-
-    public static void main(String[] args){
-        Key key = generateKey();
-        String message = "salut à tous";
-        String messageCrypté = crypteMessage(message, key);
-        System.out.println("Message crypté (Base64) : " + messageCrypté);
-        System.out.println("Message décrypté : " + decrypteMessage(messageCrypté, key));
-    }
 }

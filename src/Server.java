@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.KeyPair;
 
 /**
@@ -13,9 +14,9 @@ public class Server {
 
     public Server() {
         try {
-            écoute();
+            Socket clientSocket = écoute();
+            communication = créerCommunication(clientSocket);
             rsaKeyPair = RSA.generateKey();
-            communication.créerFluxDeCommunication();
             sendRSAKey();
             getAESKey();
             communication.out.println(AES.crypteMessage("Salutation du server", communication.aesKey));
@@ -25,35 +26,42 @@ public class Server {
         }
     }
 
-        /**
-     * Créer la socket sur laquelle il attend une connexion, sur le port 4444 
+    /**
+     * Créer la socket sur laquelle le serveur attend une connexion, sur le port 4444 
      */
-    public void écoute() throws IOException {
+    public Socket écoute() throws IOException {
 
-        
         serverSocket = new ServerSocket(4444);
         System.out.println("Server en écoute sur le port 4444");
 
-        communication = new Communication(serverSocket.accept());
+        return serverSocket.accept();
+    }
+    
+    /**
+     * Créer une nouvelle communication avec le client 
+     * @param clientSocket Socket envoyé par le client
+     * @return un nouveau objet communication
+     * @throws IOException
+     */
+    private Communication créerCommunication(Socket clientSocket) throws IOException{
         System.out.println("Client connecté");
+        return new Communication(clientSocket);
     }
 
     /**
-     * méthode qui créer puis envoie au client la clé RSA publique 
+     * Méthode qui créer envoie au client la clé RSA publique 
      */
     public void sendRSAKey(){
         System.out.println("Envoie de la clé publique RSA");
-        communication.out.println(RSA.publicKeyToString(rsaKeyPair.getPublic())); // envoie de la clé public
+        communication.out.println(RSA.publicKeyToString(rsaKeyPair.getPublic())); 
     }
 
     /**
-     * Récupère la Key AES envoyé par le serveur
+     * Récupère la clé AES envoyé par le serveur
      */
     public void getAESKey() throws IOException{
         System.out.println("Récupération de la clé AES");
         String RSAKeyBase64 = communication.in.readLine();
-        
-        // Reconstruire la clé AES à partir du tableau d'octets décrypté
         communication.aesKey = RSA.decrypteKey(RSAKeyBase64, rsaKeyPair.getPrivate());
     }
 

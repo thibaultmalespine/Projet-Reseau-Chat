@@ -13,8 +13,7 @@ public class Client {
    
     public Client(){
         try {
-            établirLaConnexion();
-            communication.créerFluxDeCommunication();
+            communication = établirLaConnexion();
             getRSAPublicKey();
             sendAESKey();
             communication.boucleDeCommunication();
@@ -23,11 +22,11 @@ public class Client {
         }  
     }
 
-     /**
-     * Fait la demande de connexion
-     */
-    public void établirLaConnexion() throws IOException{
-        this.communication = new Communication(new Socket(ipServer, port));
+    /**
+    * Fait la demande de connexion
+    */
+    public Communication établirLaConnexion() throws IOException{
+        return new Communication(new Socket(ipServer, port));
     }
 
     /**
@@ -37,12 +36,12 @@ public class Client {
     public void getRSAPublicKey() throws IOException{
         System.out.println("Récupération de la clé publique RSA");
         String encodedKey = communication.in.readLine();
-        rsaPublicKey = RSA.StringToPublicKey(encodedKey);
+        rsaPublicKey = RSA.stringToPublicKey(encodedKey);
     }
 
     
     /**
-     * Méthode qui créer puis envoie au serveur la Key AES
+     * Méthode qui créer puis envoie au serveur la clé AES
      */
     public void sendAESKey(){
         System.out.println("Cryptage et envoie de la clé AES");
@@ -51,7 +50,7 @@ public class Client {
         communication.aesKey = AES.generateKey();
     
         // Envoyer la clé AES chiffrée au serveur
-        communication.out.println( RSA.crypteKey(communication.aesKey, rsaPublicKey));    
+        communication.out.println(RSA.crypteKey(communication.aesKey, rsaPublicKey));    
 
     }
 
