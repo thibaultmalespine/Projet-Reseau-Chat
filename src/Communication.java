@@ -33,18 +33,8 @@ public class Communication {
      * Permet de continuer la communication tant que le message envoyé n'est pas vide
      */
     public void boucleDeCommunication() throws IOException{
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        String userInput = "";
-        String clientInput = "";
-        while (! userInput.equals(patternDeFin)) {
-            if ((clientInput = in.readLine()).equals(patternDeFin)){
-                break;
-            }
-            System.out.println("début communication");
-            System.out.println("message crypté : " + clientInput);
-            System.out.println("message décrypté : "+AES.decrypteMessage(clientInput, aesKey));
-            userInput = stdIn.readLine();
-            out.println(AES.crypteMessage(userInput, aesKey));
-        }
+        System.out.println("Début de la communication");
+        new ThreadGetMessage(this).start();
+        new ThreadSendMessage(this).start();
     }
 }

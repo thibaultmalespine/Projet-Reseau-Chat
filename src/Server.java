@@ -19,7 +19,6 @@ public class Server {
             rsaKeyPair = RSA.generateKey();
             sendRSAKey();
             getAESKey();
-            communication.out.println(AES.crypteMessage("Salutation du server", communication.aesKey));
             communication.boucleDeCommunication();
         } catch (IOException e) {
             e.printStackTrace();

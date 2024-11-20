@@ -1,4 +1,3 @@
-- Faire les tests
 - Ajouter les threads
 - Pouvoir communiquer avec plusieurs clients
 - Interface Graphique
