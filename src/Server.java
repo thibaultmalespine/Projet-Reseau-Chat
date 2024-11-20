@@ -2,66 +2,72 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyPair;
+import java.util.ArrayList;
 
 /**
  * Classe du serveur
  */
 public class Server {
 
-    Communication communication;
+    ArrayList<Client> clients = new ArrayList<>();
     ServerSocket serverSocket;
     KeyPair rsaKeyPair;
 
+    ArrayList<ThreadGetMessages> threadsGetMessages = new ArrayList<>();
+
     public Server() {
+        
+        rsaKeyPair = RSA.generateKey();
         try {
-            Socket clientSocket = écoute();
-            communication = créerCommunication(clientSocket);
-            rsaKeyPair = RSA.generateKey();
-            sendRSAKey();
-            getAESKey();
-            communication.boucleDeCommunication();
+            serverSocket = new ServerSocket(4444);
+            System.out.println("Server en écoute sur le port 4444");
+            
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Client connecté");
+                Client client = new Client(clientSocket);
+                sendRSAKey(client);
+                getAESKey(client);
+                clients.add(client);
+
+                getMessages(client);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Créer la socket sur laquelle le serveur attend une connexion, sur le port 4444 
-     */
-    public Socket écoute() throws IOException {
-
-        serverSocket = new ServerSocket(4444);
-        System.out.println("Server en écoute sur le port 4444");
-
-        return serverSocket.accept();
-    }
-    
-    /**
-     * Créer une nouvelle communication avec le client 
-     * @param clientSocket Socket envoyé par le client
-     * @return un nouveau objet communication
-     * @throws IOException
-     */
-    private Communication créerCommunication(Socket clientSocket) throws IOException{
-        System.out.println("Client connecté");
-        return new Communication(clientSocket);
-    }
-
-    /**
      * Méthode qui créer envoie au client la clé RSA publique 
      */
-    public void sendRSAKey(){
+    public void sendRSAKey(Client client){
         System.out.println("Envoie de la clé publique RSA");
-        communication.out.println(RSA.publicKeyToString(rsaKeyPair.getPublic())); 
+        client.out.println(RSA.publicKeyToString(rsaKeyPair.getPublic())); 
     }
 
     /**
      * Récupère la clé AES envoyé par le serveur
      */
-    public void getAESKey() throws IOException{
+    public void getAESKey(Client client) throws IOException{
         System.out.println("Récupération de la clé AES");
-        String RSAKeyBase64 = communication.in.readLine();
-        communication.aesKey = RSA.decrypteKey(RSAKeyBase64, rsaKeyPair.getPrivate());
+        String RSAKeyBase64 = client.in.readLine();
+        client.aesKey = RSA.decrypteKey(RSAKeyBase64, rsaKeyPair.getPrivate());
+    }
+
+    /**
+     * Méthode qui créer les threads permettant de recevoir les messages des clients
+     */
+    private void getMessages(Client client){
+        ThreadGetMessages threadGetMessages = new ThreadGetMessages(client, this);
+        threadGetMessages.start();
+        threadsGetMessages.add(threadGetMessages);
+    }
+
+    public void diffuserMessage(String message) {
+        for (Client client : clients) {
+            client.out.println(AES.crypteMessage(message, client.aesKey));
+        }
     }
 
     public static void main(String[] args) {

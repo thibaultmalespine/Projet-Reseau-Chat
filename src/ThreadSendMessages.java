@@ -1,12 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.security.Key;
 
-public class ThreadSendMessage extends Thread {
-    Communication communication;
+public class ThreadSendMessages extends Thread {
+    private PrintWriter out;
+    private Key aesKey;
 
-    public ThreadSendMessage(Communication communication){
-        this.communication = communication;
+    public ThreadSendMessages(Client client){
+        this.out = client.out;
+        this.aesKey = client.aesKey;
     }
 
     /**
@@ -18,7 +22,7 @@ public class ThreadSendMessage extends Thread {
         String message;
         try {
             while (!(message = stdIn.readLine()).equals("bye")) {           
-                communication.out.println(AES.crypteMessage(message, communication.aesKey));
+                out.println(AES.crypteMessage(message, aesKey));
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
