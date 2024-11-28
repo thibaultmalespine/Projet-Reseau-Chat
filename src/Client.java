@@ -23,6 +23,7 @@ public class Client {
             getRSAPublicKey();
             sendAESKey();
             boucleDeCommunication();
+            new ChatGUI(this);
         } catch (IOException e) {
             e.printStackTrace();
         }  
