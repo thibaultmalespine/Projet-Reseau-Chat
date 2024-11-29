@@ -20,9 +20,14 @@ public class ThreadSendMessages extends Thread {
     public void run(){
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         String message;
+        boolean next = true;
         try {
-            while (!(message = stdIn.readLine()).equals("bye")) {           
+            while (next) {    
+                message = stdIn.readLine();       
                 out.println(AES.crypteMessage(message, aesKey));
+                if (message.equals("bye")){
+                    next = false;
+                };
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

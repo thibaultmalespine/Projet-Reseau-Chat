@@ -11,7 +11,7 @@ import java.security.Key;
 public class Client {
     private String ipServer = "127.0.0.1";
     private int port = 4444;
-    private Socket socket;
+    public Socket socket;
     public BufferedReader in;
     public PrintWriter out;
     private Key rsaPublicKey;

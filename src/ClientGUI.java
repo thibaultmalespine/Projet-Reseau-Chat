@@ -35,6 +35,7 @@ public class ClientGUI {
             }
             if (message.equals("bye")) {
                 frame.dispose();
+                System.exit(0);
             }
         });
 

@@ -18,15 +18,24 @@ public class ThreadGetMessages extends Thread {
      */
     @Override
     public void run(){
-        String message;
+        String messageCrypté;
+        String messageDecrypté;
+        boolean next = true;
         try {
-            while (!AES.decrypteMessage(message = client.in.readLine(),client.aesKey).equals("bye")) {           
-                System.out.println("message crypté : " + message);
-                System.out.println("message décrypté : "+AES.decrypteMessage(message, client.aesKey));
+            while (next) {   
+                messageCrypté = client.in.readLine();     
+                messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
+
+                System.out.println("message crypté : " + messageCrypté);
+                System.out.println("message décrypté : "+ messageDecrypté);
                 if (server != null) {
-                    server.diffuserMessage(AES.decrypteMessage(message, client.aesKey), client);
+                    server.diffuserMessage(messageDecrypté, client);
                 } else {
-                    client.gui.getMessages(AES.decrypteMessage(message, client.aesKey),"Autres: ");
+                    client.gui.getMessages(messageDecrypté,"Autres: ");
+                }
+
+                if (messageDecrypté.equals("bye")) {
+                    next = false;
                 }
             }
         } catch (IOException e) {

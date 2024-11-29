@@ -13,7 +13,6 @@ public class Server {
     ServerSocket serverSocket;
     KeyPair rsaKeyPair;
 
-    ArrayList<ThreadGetMessages> threadsGetMessages = new ArrayList<>();
 
     public Server() {
         
@@ -61,14 +60,18 @@ public class Server {
     private void getMessages(Client client){
         ThreadGetMessages threadGetMessages = new ThreadGetMessages(client, this);
         threadGetMessages.start();
-        threadsGetMessages.add(threadGetMessages);
     }
 
-    public void diffuserMessage(String message, Client c) {
+    public void diffuserMessage(String message, Client c) throws IOException{
         for (Client client : clients) {
             if (client != c){
                 client.out.println(AES.crypteMessage(message, client.aesKey));
             }
+        }
+        // Si c'est la fin de la discussion on ferme la connexion et on enlève l'ancien client de la liste des clients
+        if(message.equals("bye")) {
+        
+            //clients.remove(c);
         }
     }
 
