@@ -64,9 +64,11 @@ public class Server {
         threadsGetMessages.add(threadGetMessages);
     }
 
-    public void diffuserMessage(String message) {
+    public void diffuserMessage(String message, Client c) {
         for (Client client : clients) {
-            client.out.println(AES.crypteMessage(message, client.aesKey));
+            if (client != c){
+                client.out.println(AES.crypteMessage(message, client.aesKey));
+            }
         }
     }
 

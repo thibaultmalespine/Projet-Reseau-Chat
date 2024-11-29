@@ -1,20 +1,15 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.security.Key;
 
 public class ThreadGetMessages extends Thread {
-    private BufferedReader in;
-    private Key aesKey;
     private Server server;
+    private Client client;
 
     public ThreadGetMessages(Client client){
-        this.in = client.in;
-        this.aesKey = client.aesKey;
+        this.client = client;
     }
 
     public ThreadGetMessages(Client client, Server server){
-        this.in = client.in;
-        this.aesKey = client.aesKey;
+        this.client = client;
         this.server = server;
     }
 
@@ -25,11 +20,13 @@ public class ThreadGetMessages extends Thread {
     public void run(){
         String message;
         try {
-            while (!(message = in.readLine()).equals("bye")) {           
+            while (!AES.decrypteMessage(message = client.in.readLine(),client.aesKey).equals("bye")) {           
                 System.out.println("message crypté : " + message);
-                System.out.println("message décrypté : "+AES.decrypteMessage(message, aesKey));
+                System.out.println("message décrypté : "+AES.decrypteMessage(message, client.aesKey));
                 if (server != null) {
-                    server.diffuserMessage(AES.decrypteMessage(message, aesKey));
+                    server.diffuserMessage(AES.decrypteMessage(message, client.aesKey), client);
+                } else {
+                    client.gui.getMessages(AES.decrypteMessage(message, client.aesKey),"Autres: ");
                 }
             }
         } catch (IOException e) {

@@ -16,14 +16,15 @@ public class Client {
     public PrintWriter out;
     private Key rsaPublicKey;
     public Key aesKey;
+    public ClientGUI gui;
    
     public Client(){
+        gui = new ClientGUI(this);
         try {
             établirLaConnexion();
             getRSAPublicKey();
             sendAESKey();
             boucleDeCommunication();
-            new ChatGUI(this);
         } catch (IOException e) {
             e.printStackTrace();
         }  

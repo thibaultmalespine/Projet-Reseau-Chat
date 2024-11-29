@@ -4,14 +4,14 @@ import java.awt.*;
 /**
  * Classe de l'interface graphique
  */
-public class ChatGUI {
+public class ClientGUI {
 
     private JFrame frame;
     private JTextArea textArea;
     private JTextField textField;
     private JButton sendButton;
 
-    public ChatGUI(Client client) {
+    public ClientGUI(Client client) {
 
         // Configurer l'interface graphique
         frame = new JFrame("Interface Client");
@@ -29,9 +29,12 @@ public class ChatGUI {
         sendButton.addActionListener(e -> {
             String message = textField.getText();
             if (!message.trim().isEmpty()) {
-                client.out.println(message);
-                textArea.append("Vous: " + message + "\n");
+                client.out.println(AES.crypteMessage(message, client.aesKey));
+                getMessages(message,"Vous: ");
                 textField.setText("");  // Réinitialiser le champ de saisie
+            }
+            if (message.equals("bye")) {
+                frame.setVisible(false);
             }
         });
 
@@ -48,4 +51,11 @@ public class ChatGUI {
         frame.setVisible(true);
 
 }
+
+    public void getMessages(String message, String id) {
+        textArea.append( id + message + "\n");
+    }
+
+
+
 }
