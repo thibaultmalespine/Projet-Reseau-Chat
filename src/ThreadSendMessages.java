@@ -21,7 +21,7 @@ public class ThreadSendMessages extends Thread {
             while (next) {    
                 message = stdIn.readLine();       
                 client.out.println(AES.crypteMessage(message, client.aesKey));
-                client.gui.getMessages(message, "Vous : ");
+                client.gui.getMessages(message, "Vous: ");
                 if (message.equals("bye")){
                     next = false;
                 };
