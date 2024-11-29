@@ -34,9 +34,7 @@ public class ThreadGetMessages extends Thread {
                     client.gui.getMessages(messageDecrypté,"Autres: ");
                 }
 
-                if (messageDecrypté.equals("bye")) {
-                    next = false;
-                }
+                
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

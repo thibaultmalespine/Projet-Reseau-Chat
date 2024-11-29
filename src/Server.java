@@ -62,17 +62,13 @@ public class Server {
         threadGetMessages.start();
     }
 
-    public void diffuserMessage(String message, Client c) throws IOException{
+    public void diffuserMessage(String message, Client c) {
         for (Client client : clients) {
             if (client != c){
                 client.out.println(AES.crypteMessage(message, client.aesKey));
             }
         }
-        // Si c'est la fin de la discussion on ferme la connexion et on enlève l'ancien client de la liste des clients
-        if(message.equals("bye")) {
-        
-            //clients.remove(c);
-        }
+       
     }
 
     public static void main(String[] args) {
