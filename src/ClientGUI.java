@@ -34,7 +34,7 @@ public class ClientGUI {
                 textField.setText("");  // Réinitialiser le champ de saisie
             }
             if (message.equals("bye")) {
-                frame.setVisible(false);
+                frame.dispose();
             }
         });
 
