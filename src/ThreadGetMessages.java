@@ -20,18 +20,24 @@ public class ThreadGetMessages extends Thread {
     public void run(){
         String messageCrypté;
         String messageDecrypté;
+        String pseudo;
         boolean next = true;
         try {
             while (next) {   
                 messageCrypté = client.in.readLine();     
-                messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
-
-                System.out.println("message crypté : " + messageCrypté);
-                System.out.println("message décrypté : "+ messageDecrypté);
+                // si la variable server n'est pas null, alors c'est un client qui envoie un message au server
                 if (server != null) {
+                    messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
+    
+                    System.out.println("message crypté : " + messageCrypté);
+                    System.out.println("message décrypté : "+ messageDecrypté);
                     server.diffuserMessage(messageDecrypté, client);
-                } else {
-                    client.gui.getMessages(messageDecrypté,"Autres: ");
+                } else { // sinon c'est le server qui distribue le message à tous les autres clients
+                    pseudo = messageCrypté.split(" ")[0];
+                    messageCrypté = messageCrypté.split(" ")[1];
+                    messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
+
+                    client.gui.getMessages(messageDecrypté, pseudo);
                 }
 
                 

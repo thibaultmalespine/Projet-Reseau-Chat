@@ -75,7 +75,8 @@ public class Server {
     public void diffuserMessage(String message, Client c) {
         for (Client client : clients) {
             if (client != c){
-                client.out.println(AES.crypteMessage(message, client.aesKey));
+                // on envoie le pseudo et le message associé
+                client.out.println(c.pseudo + " " +AES.crypteMessage(message, client.aesKey));
             }
         }
        
