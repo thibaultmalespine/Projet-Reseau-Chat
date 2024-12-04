@@ -25,6 +25,7 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connecté");
                 Client client = new Client(clientSocket);
+                getPseudo(client);
                 sendRSAKey(client);
                 getAESKey(client);
                 clients.add(client);
@@ -35,6 +36,15 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Récupère le pseudo du client
+     * 
+     */
+    private void getPseudo(Client client) throws IOException{
+        String pseudo = client.in.readLine();
+        client.pseudo = pseudo;
     }
 
     /**

@@ -23,6 +23,7 @@ public class Client {
         gui = new ClientGUI(this);
         try {
             établirLaConnexion();
+            sendPseudo();
             getRSAPublicKey();
             sendAESKey();
             boucleDeCommunication();
@@ -51,6 +52,14 @@ public class Client {
         // Créer le flux d'entré et de sortie pour communiquer entre deux appareils
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+    }
+
+    /**
+     * Envoi le pseudo du client au serveur
+     * @throws IOException
+     */
+    private void sendPseudo(){
+        out.println(this.pseudo);
     }
 
     /**
