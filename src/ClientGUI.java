@@ -69,7 +69,7 @@ public class ClientGUI {
 }
 
     public void getMessages(String message, String id) {
-        textArea.append( id + message + "\n");
+        textArea.append( id+" : " + message + "\n");
     }
 
 
