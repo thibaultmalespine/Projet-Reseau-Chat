@@ -21,7 +21,7 @@ public class ClientGUI {
     public ClientGUI(Client client) {
 
          // Demander le client.pseudo à l'utilisateur
-        client.pseudo = JOptionPane.showInputDialog(null, "Entrez votre client.pseudo :", "Pseudo", JOptionPane.QUESTION_MESSAGE);
+        client.pseudo = JOptionPane.showInputDialog(null, "Entrez votre client.pseudo :", "Pseudo", JOptionPane.QUESTION_MESSAGE).replaceAll(" ", "_");
 
         // Vérifier que le client.pseudo n'est pas vide ou annulé
         if (client.pseudo == null || client.pseudo.trim().isEmpty()) {
@@ -69,7 +69,7 @@ public class ClientGUI {
 }
 
     public void getMessages(String message, String id) {
-        textArea.append( id+" : " + message + "\n");
+        textArea.append( id+": " + message + "\n");
     }
 
 
