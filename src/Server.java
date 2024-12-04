@@ -72,6 +72,11 @@ public class Server {
         threadGetMessages.start();
     }
 
+    /**
+     * Methode pour renvoyer le message reçu par le serveur vers tous les autres clients
+     * @param message
+     * @param c
+     */
     public void diffuserMessage(String message, Client c) {
         for (Client client : clients) {
             if (client != c){
@@ -80,6 +85,21 @@ public class Server {
             }
         }
        
+    }
+
+    /**
+     * Renvoie le message reçu seulement au client destinataire
+     * @param message
+     * @param pseudo
+     */
+    public void messagePrivé(String message,Client c, String pseudo){
+        System.out.println(pseudo);
+        for (Client client : clients) {
+            if(client.pseudo.equals(pseudo)){
+                // on envoie le pseudo et le message associé
+                client.out.println(c.pseudo + " " +AES.crypteMessage(message, client.aesKey));
+            }
+        }
     }
 
     public static void main(String[] args) {

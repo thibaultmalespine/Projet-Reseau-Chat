@@ -19,31 +19,56 @@ public class ThreadGetMessages extends Thread {
     @Override
     public void run(){
         String messageCrypté;
-        String messageDecrypté;
-        String pseudo;
         boolean next = true;
         try {
             while (next) {   
                 messageCrypté = client.in.readLine();     
                 // si la variable server n'est pas null, alors c'est un client qui envoie un message au server
                 if (server != null) {
-                    messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
-    
-                    System.out.println("message crypté : " + messageCrypté);
-                    System.out.println("message décrypté : "+ messageDecrypté);
-                    server.diffuserMessage(messageDecrypté, client);
+                   serverResponse(messageCrypté);
                 } else { // sinon c'est le server qui distribue le message à tous les autres clients
-                    pseudo = messageCrypté.split(" ")[0];
-                    messageCrypté = messageCrypté.split(" ")[1];
-                    messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
-
-                    client.gui.getMessages(messageDecrypté, pseudo);
+                    clientResponse(messageCrypté);
                 }
-
-                
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+    /**
+     * Gère la réponse du serveur lorsqu'il reçoit un message
+     * @param messageCrypté
+     */
+    private void serverResponse(String messageCrypté){
+        String messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
+        System.out.println("message crypté : " + messageCrypté);
+        System.out.println("message décrypté : "+ messageDecrypté);
+        if(messageDecrypté.charAt(0) == '@'){
+            sendPrivateMessage(messageDecrypté);
+        } else {
+            server.diffuserMessage(messageDecrypté, client);
+        }
+    }
+    /**
+     * Gère les messages privées reçu par le serveur
+     * @param messageDecrypté
+     */
+    private void sendPrivateMessage(String messageDecrypté){
+        String pseudo = messageDecrypté.split(" ")[0].substring(1);
+        try {
+            messageDecrypté = messageDecrypté.split(" ")[1];
+        } finally {
+            server.messagePrivé(messageDecrypté, client, pseudo);
+        };
+    }
+    /**
+     * Gère la réponse du client lorsqu'il reçoit un message
+     * @param messageCrypté
+     */
+    private void clientResponse(String messageCrypté){
+        String pseudo = messageCrypté.split(" ")[0];
+        messageCrypté = messageCrypté.split(" ")[1];
+        String messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
+
+        client.gui.getMessages(messageDecrypté, pseudo);
     }
 }
