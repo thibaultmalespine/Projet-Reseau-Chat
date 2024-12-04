@@ -23,11 +23,11 @@ public class ThreadGetMessages extends Thread {
         try {
             while (next) {   
                 messageCrypté = client.in.readLine();     
-                // si la variable server n'est pas null, alors c'est un client qui envoie un message au server
+                // si la variable serveur n'est pas null, alors c'est le serveur qui reçoit un message d'un client
                 if (server != null) {
                    serverResponse(messageCrypté);
-                } else { // sinon c'est le server qui distribue le message à tous les autres clients
-                    clientResponse(messageCrypté);
+                } else { // sinon c'est un client qui reçoit un message du serveur
+                   clientResponse(messageCrypté);
                 }
             }
         } catch (IOException e) {
@@ -42,10 +42,18 @@ public class ThreadGetMessages extends Thread {
         String messageDecrypté = AES.decrypteMessage(messageCrypté,client.aesKey);
         System.out.println("message crypté : " + messageCrypté);
         System.out.println("message décrypté : "+ messageDecrypté);
-        if(messageDecrypté.charAt(0) == '@'){
-            sendPrivateMessage(messageDecrypté);
-        } else {
-            server.diffuserMessage(messageDecrypté, client);
+
+        switch (messageDecrypté.charAt(0)) {
+            case '@':
+                sendPrivateMessage(messageDecrypté);    
+                break;
+
+            case '\\':
+                respondToCommand(messageDecrypté.substring(1));
+                break;
+            default:
+                server.diffuserMessage(messageDecrypté, client);
+                break;
         }
     }
     /**
@@ -60,6 +68,26 @@ public class ThreadGetMessages extends Thread {
             server.messagePrivé(messageDecrypté, client, pseudo);
         };
     }
+
+    /**
+     * Gère la commande reçu par le serveur
+     * @param commande 
+     */
+    private void respondToCommand(String commande){
+        switch (commande) {
+            case "all":
+            String pseudo = "";
+            for (Client c : server.clients) {
+                pseudo += c.pseudo+" ";
+            }
+            client.out.println("pseudo" + " " +AES.crypteMessage(pseudo, client.aesKey));
+            break;
+        
+            default:
+                break;
+        }
+    }
+
     /**
      * Gère la réponse du client lorsqu'il reçoit un message
      * @param messageCrypté
