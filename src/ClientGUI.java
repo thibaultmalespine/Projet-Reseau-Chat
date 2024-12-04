@@ -21,7 +21,7 @@ public class ClientGUI {
     public ClientGUI(Client client) {
 
          // Demander le client.pseudo à l'utilisateur
-        client.pseudo = JOptionPane.showInputDialog(null, "Entrez votre client.pseudo :", "Pseudo", JOptionPane.QUESTION_MESSAGE).replaceAll(" ", "_");
+        client.pseudo = JOptionPane.showInputDialog(null, "Entrez votre pseudo :", "Pseudo", JOptionPane.QUESTION_MESSAGE).replaceAll(" ", "_");
 
         // Vérifier que le client.pseudo n'est pas vide ou annulé
         if (client.pseudo == null || client.pseudo.trim().isEmpty()) {
@@ -45,7 +45,7 @@ public class ClientGUI {
             String message = textField.getText();
             if (!message.trim().isEmpty()) {
                 client.out.println(AES.crypteMessage(message, client.aesKey));
-                getMessages(message,"Vous: ");
+                getMessages(message,"Vous");
                 textField.setText("");  // Réinitialiser le champ de saisie
             }
             if (message.equals("bye")) {
