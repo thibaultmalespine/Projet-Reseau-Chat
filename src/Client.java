@@ -17,6 +17,7 @@ public class Client {
     private Key rsaPublicKey;
     public Key aesKey;
     public ClientGUI gui;
+    public String pseudo;
    
     public Client(){
         gui = new ClientGUI(this);

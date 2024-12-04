@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -19,8 +20,16 @@ public class ClientGUI {
 
     public ClientGUI(Client client) {
 
+         // Demander le client.pseudo à l'utilisateur
+        client.pseudo = JOptionPane.showInputDialog(null, "Entrez votre client.pseudo :", "Pseudo", JOptionPane.QUESTION_MESSAGE);
+
+        // Vérifier que le client.pseudo n'est pas vide ou annulé
+        if (client.pseudo == null || client.pseudo.trim().isEmpty()) {
+            client.pseudo = "Anonyme";
+        }
+
         // Configurer l'interface graphique
-        frame = new JFrame("Interface Client");
+        frame = new JFrame("Interface Client - " + client.pseudo);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
 
