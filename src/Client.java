@@ -9,7 +9,7 @@ import java.security.Key;
  * Classe du client
  */
 public class Client {
-    private String ipServer = "192.168.1.12";
+    private String ipServer = "localhost";
     private int port = 4444;
     public Socket socket;
     public BufferedReader in; 

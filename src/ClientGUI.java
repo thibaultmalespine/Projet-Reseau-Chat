@@ -1,12 +1,5 @@
-import java.awt.BorderLayout;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  * Classe de l'interface graphique
@@ -18,6 +11,9 @@ public class ClientGUI {
     private JTextField textField;
     private JButton sendButton;
 
+    /**
+     * Constructeur pour générer l'interface graphique
+    */
     public ClientGUI(Client client) {
 
          // Demander le client.pseudo à l'utilisateur
@@ -31,21 +27,39 @@ public class ClientGUI {
         // Configurer l'interface graphique
         frame = new JFrame("Interface Client - " + client.pseudo);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
+        frame.setSize(500, 500);
 
+        // Ajouter un panneau principal avec un layout BorderLayout
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(255, 228, 196)); // Couleur de fond chaleureuse
+
+        // Créer une zone de texte pour afficher les messages
         textArea = new JTextArea();
         textArea.setEditable(false);
+        textArea.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        textArea.setBackground(new Color(255, 250, 240)); // Couleur de fond légèrement différente
+        textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JScrollPane scrollPane = new JScrollPane(textArea);
 
-        textField = new JTextField(25);
+        // Créer un panneau pour les contrôles d'envoi de message
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.setBackground(new Color(255, 228, 196));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        textField = new JTextField();
+        textField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         sendButton = new JButton("Envoyer");
+        sendButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        sendButton.setBackground(new Color(255, 165, 0)); // Couleur chaude pour le bouton
+        sendButton.setForeground(Color.WHITE);
+        sendButton.setFocusPainted(false);
 
         // Ajouter un gestionnaire d'événements pour le bouton "Envoyer"
         sendButton.addActionListener(e -> {
             String message = textField.getText();
             if (!message.trim().isEmpty()) {
                 client.out.println(AES.crypteMessage(message, client.aesKey));
-                getMessages(message,"Vous");
+                getMessages(message, "Vous");
                 textField.setText("");  // Réinitialiser le champ de saisie
             }
             if (message.equals("bye")) {
@@ -57,19 +71,24 @@ public class ClientGUI {
         // Ajouter un ActionListener sur le champ de texte pour la touche "Entrée"
         textField.addActionListener(e -> sendButton.doClick());  // Simuler un clic sur le bouton "Envoyer" en appuyant sur "Entrée"
 
-        JPanel panel = new JPanel();
-        panel.add(textField);
-        panel.add(sendButton);
+        // Disposition des composants dans le panneau d'entrée
+        inputPanel.add(textField, BorderLayout.CENTER);
+        inputPanel.add(sendButton, BorderLayout.EAST);
 
-        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        frame.getContentPane().add(panel, BorderLayout.SOUTH);
+        // Ajouter les composants au panneau principal
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(inputPanel, BorderLayout.SOUTH);
 
+        frame.getContentPane().add(mainPanel);
         frame.setVisible(true);
+    }
 
-}
 
+    /**
+     * Méthode pour ajouter le message reçue au textArea
+    */
     public void getMessages(String message, String id) {
-        textArea.append( id+": " + message + "\n");
+        textArea.append( id + ": " + message + "\n");
     }
 
 
