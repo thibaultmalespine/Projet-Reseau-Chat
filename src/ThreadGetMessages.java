@@ -1,13 +1,24 @@
 import java.io.IOException;
 
+/**
+ * Classe des threads pour les messages entrants
+ */
 public class ThreadGetMessages extends Thread {
     private Server server;
     private Client client;
 
+    /**
+     * Initialise un thread (pour un client)
+     * @param client
+     */
     public ThreadGetMessages(Client client){
         this.client = client;
     }
-
+    /**
+     * Initialise un thread (pour un serveur)
+     * @param client
+     * @param server
+     */
     public ThreadGetMessages(Client client, Server server){
         this.client = client;
         this.server = server;

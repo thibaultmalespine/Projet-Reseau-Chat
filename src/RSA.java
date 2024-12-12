@@ -9,6 +9,9 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Classe qui gère les opérations liés au cryptage RSA
+ */
 public class RSA {
     /**
      * Méthode pour générer une paire de clés RSA

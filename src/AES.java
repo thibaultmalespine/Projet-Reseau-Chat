@@ -5,6 +5,9 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
+/**
+ * Classe qui gère les opérations liés au cryptage AES
+ */
 public class AES {
 
     /**

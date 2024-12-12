@@ -12,13 +12,16 @@ public class Client {
     private String ipServer = "192.168.1.12";
     private int port = 4444;
     public Socket socket;
-    public BufferedReader in;
+    public BufferedReader in; 
     public PrintWriter out;
     private Key rsaPublicKey;
     public Key aesKey;
     public ClientGUI gui;
     public String pseudo;
    
+    /**
+     * Initialise un Client qui établit la connexion avec le serveur
+     */
     public Client(){
         gui = new ClientGUI(this);
         try {
@@ -32,6 +35,12 @@ public class Client {
         }  
     }
 
+    /**
+     * Initialise un Client à partir d'une socket 
+     * (pour la liste de clients du serveur)
+     *
+     * @param socket socket de communication entre le client et le serveur
+     */
     public Client(Socket socket){
         try {
             this.socket = socket;

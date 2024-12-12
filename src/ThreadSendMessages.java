@@ -1,10 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+/**
+ * Classe des threads pour les messages envoyés par un client
+ */
 public class ThreadSendMessages extends Thread {
     private Client client;
 
+    /**
+     * Initialise un thread 
+     * @param client
+     */
     public ThreadSendMessages(Client client){
         this.client = client;
     }

@@ -13,7 +13,10 @@ public class Server {
     ServerSocket serverSocket;
     KeyPair rsaKeyPair;
 
-
+    /**
+     * Initialise le Server pour qu'il écoute indéfiniment les demandes de connexion,
+     * puis créer un nouveau thread pour chaque nouveau client
+     */
     public Server() {
         
         rsaKeyPair = RSA.generateKey();
