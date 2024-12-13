@@ -1,0 +1,89 @@
+@startuml
+class Server {
+    - ArrayList<Client> clients
+    - ServerSocket serverSocket
+    - KeyPair rsaKeyPair
+    --
+    + Server()
+    - void getPseudo(Client client)
+    + void sendRSAKey(Client client)
+    - void getAESKey(Client client)
+    - void getMessages(Client client)
+    + void diffuserMessage(String message, Client c)
+    + void messagePrivé(String message, Client c, String pseudo)
+    + static void main(String[] args)
+}
+
+class Client {
+    - String ipServer
+    - int port
+    + Socket socket
+    + BufferedReader in 
+    + PrintWriter out
+    - Key rsaPublicKey
+    + Key aesKey
+    + ClientGUI gui
+    + String pseudo
+    --
+    + Client()
+    + Client(Socket socket)
+    - void établirLaConnexion()
+    - void sendPseudo()
+    - void getRSAPublicKey()
+    - void sendAESKey()
+    + void boucleDeCommunication()
+    + static void main(String[] args)
+}
+
+class ClientGUI {
+    - String frame
+    - String textArea
+    - String textField
+    - String sendButton
+    --
+    + ClientGUI(Client client)
+    + void getMessages(String message, String id)
+}
+
+class ThreadGetMessages {
+    - Server server
+    - Client client
+    --
+    + ThreadGetMessages(Client client)
+    + ThreadGetMessages(Client client, Server server)
+    + void run()
+    - void serverResponse(String messageCrypté)
+    - void sendPrivateMessage(String messageDecrypté)
+    - void respondToCommand(String commande)
+    - void clientResponse(String messageCrypté)
+}
+
+class ThreadSendMessages {
+    - Client client
+    --
+    + ThreadSendMessages(Client client)
+    + void run()
+}
+
+class RSA {
+    + static KeyPair generateKey()
+    + static String publicKeyToString(Key publicKey)
+    + static Key stringToPublicKey(String key)
+    + static String crypteKey(Key aesKey, Key publicKey)
+    + static Key decrypteKey(String encryptedKey, Key privateKey)
+}
+
+class AES {
+    + static Key generateKey()
+    + static String crypteMessage(String message, Key aesKey)
+    + static String decrypteMessage(String message, Key aesKey)
+}
+
+Server "1" *-- "many" Client : manages
+Server "1" *-- "many" ThreadGetMessages : creates
+Client "1" o-- "1" ClientGUI : uses
+Client "1" *-- "1" RSA : interacts
+Client "1" *-- "1" AES : interacts
+Client "1" *-- "1" ThreadGetMessages : receives
+Client "1" *-- "1" ThreadSendMessages : sends
+@enduml

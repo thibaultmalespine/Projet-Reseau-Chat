@@ -1,1 +1,0 @@
-explication 1 : // Conversion en base64 des binaires avant de les envoyer sur le réseau, ce qui permet de facilement passer des classes byte[] à String 
